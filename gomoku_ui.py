@@ -57,14 +57,14 @@ class GomokuUI:
     def update(self):
         pygame.display.update()
 
-    def handle_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
-                col = mouse_pos[0] // self.SQUARE_SIZE
-                row = mouse_pos[1] // self.SQUARE_SIZE
-                return (row, col)
-        return (-1,-1)
+    def handle_click_events(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    return
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    # Xử lý click chuột
+                    col = event.pos[0] // self.SQUARE_SIZE
+                    row = event.pos[1] // self.SQUARE_SIZE
+                    return row, col
