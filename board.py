@@ -61,7 +61,7 @@ class Board:
     def has_winner(self):
         lines = self.get_all_lines()
         for line in lines:
-            if (self.is_winning_line(line) == Constants.Constants.COMP ):
+            if (self.is_winning_line(line) == Constants.COMP ):
                 return Constants.COMP
             if (self.is_winning_line(line) == Constants.HUMAN):
                 return Constants.HUMAN
@@ -72,7 +72,7 @@ class Board:
         if(self.score_line(line) == -10000): return Constants.HUMAN
         return None
     
-    def score_line(line):
+    def score_line(self, line):
         score = 0
         try: 
             if (len(line) == 6):
@@ -89,3 +89,17 @@ class Board:
         except (KeyError):
             score += 0
         return score
+
+    def evaluate(self):
+        score = 0
+        lines = self.get_all_lines()
+        for line in lines:
+            score += self.score_line(line)
+        return score
+
+    def set_move(self, x, y, player):
+        if (self.grid[x][y] == None):
+            self.grid[x][y] = player
+            return True
+        else:
+            return False
