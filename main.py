@@ -5,8 +5,8 @@ from board import Board
 
 def get_input():
     size = 0
-    h_choice = ''  # X or O
-    c_choice = ''  # X or O
+    human_symbol = ''  # X or O
+    comp_symbol = ''  # X or O
     first = ''
     while size < 6:
         try:
@@ -15,31 +15,32 @@ def get_input():
         except (KeyError, ValueError):
             print('Bad choice')
 
-    while h_choice != 'O' and h_choice != 'X':
+    while human_symbol != 'O' and human_symbol != 'X':
         try:
             print('')
-            h_choice = input('Choose X or O\nChosen: ').upper()
+            human_symbol = input('Choose X or O\nChosen: ').upper()
         except (KeyError, ValueError):
             print('Bad choice')
 
-    if h_choice == 'X':
-        c_choice = 'O'
+    if human_symbol == 'X':
+        comp_symbol = 'O'
     else:
-        c_choice = 'X'
+        comp_symbol = 'X'
 
     while first != 'Y' and first != 'N':
         try:
             first = input('First to start?[y/n]: ').upper()
         except (KeyError, ValueError):
             print('Bad choice')
-    return size, h_choice, c_choice, first
+    return size, human_symbol, comp_symbol, first
 
 def main():
-    size, h_choice, c_choice, first = get_input()
-    player1 = Player(h_choice, False)
-    player2 = Player(c_choice, True)
+    size, human_symbol, comp_symbol, first = get_input()
+    player_human = Player(human_symbol, False)
+    player_comp = Player(comp_symbol, True)
     board = Board(size)
-    game = Game(board, player1, player2, first)
+    game = Game(board, player_human, player_comp, first)
     game.start_game()
 
 
+main()
