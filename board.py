@@ -46,7 +46,7 @@ class Board:
     def is_full(self):
         for row in range(self.size):
             for col in range(self.size):
-                if self.grid[row][col] == None:
+                if self.is_empty_cell(row, col):
                     return False
         return True
 
@@ -61,15 +61,10 @@ class Board:
     def has_winner(self):
         lines = self.get_all_lines()
         for line in lines:
-            if (self.is_winning_line(line) == Constants.COMP ):
+            if (self.score_line(line) == 10000 ):
                 return Constants.COMP
-            if (self.is_winning_line(line) == Constants.HUMAN):
+            if (self.score_line(line) == -10000):
                 return Constants.HUMAN
-        return None
-    
-    def is_winning_line(self, line):
-        if(self.score_line(line) == 10000): return Constants.COMP
-        if(self.score_line(line) == -10000): return Constants.HUMAN
         return None
     
     def score_line(self, line):
