@@ -23,10 +23,10 @@ class Game:
             self.current_player = self.player_human
     
     def is_game_over(self):
-        return self.board.is_full() or self.board.has_winner()
+        return self.board.is_full() or self.board.has_winner() is not None
     
     def alpha_beta_pruning(self, player, alpha, beta, depth):
-        if self.is_game_over():
+        if depth == 0 or self.board.has_winner() is not None:
             return self.board.evaluate(), None, None
 
         if player == self.player_comp:
@@ -35,7 +35,7 @@ class Game:
             for i in range(self.board.size):
                 for j in range(self.board.size):
                     if self.board.grid[i][j] == None:
-                        self.board.grid[i][j] = player
+                        self.board.grid[i][j] = Constants.COMP
                         score, _, _ = self.alpha_beta_pruning(
                            self.player_human, alpha, beta, depth-1)
                         self.board.grid[i][j] = None
@@ -52,7 +52,7 @@ class Game:
             for i in range(self.board.size):
                 for j in range(self.board.size):
                     if self.board.grid[i][j] == None:
-                        self.board.grid[i][j] = player
+                        self.board.grid[i][j] = Constants.HUMAN
                         score, _, _ = self.alpha_beta_pruning(
                             self.player_comp, alpha, beta, depth-1)
                         self.board.grid[i][j] = None
@@ -79,7 +79,6 @@ class Game:
                 depth = 2
             _, x, y = self.alpha_beta_pruning(self.player_comp, -math.inf, math.inf, depth)
         self.board.set_move(x, y, Constants.COMP)
-        self.switch_player()
         self.draw_ui()
 
     def handle_human_turn(self):
@@ -88,24 +87,27 @@ class Game:
         print(f'Human turn [{self.player_human.symbol}]')
         is_choose = False
         while not is_choose:
-            row, col = self.ui.handle_events()
-            if self.board.grid[row][col] == None:
-                self.board.grid[row][col] = Constants.HUMAN
+            row, col = self.ui.handle_click_events()
+            if self.board.set_move(row, col, Constants.HUMAN):
                 is_choose = True
                 break
             else:
                 continue
         self.draw_ui()
-        self.ui.update()
+        
 
     def draw_ui(self):
         self.ui.fill_screen()
         self.ui.draw_grid()
         self.ui.draw_board(self.board.grid, self.player_human.symbol, self.player_comp.symbol)
+        self.ui.update()
     
     def start_game(self):
+        self.draw_ui()
         while (not self.is_game_over()):
             if(self.current_player == self.player_comp):
                 self.handle_comp_turn()
             else:
                 self.handle_human_turn()
+            self.switch_player()
+            
