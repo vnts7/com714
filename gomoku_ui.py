@@ -50,6 +50,9 @@ class GomokuUI:
         text = self.font.render(message, True, self.BLACK)
         text_rect = text.get_rect(center=(self.length//2, self.length-self.SQUARE_SIZE//2))
         self.screen.blit(text, text_rect)
+    
+    def fill_screen(self):
+        self.screen.fill(self.WHITE)
 
     def update(self):
         pygame.display.update()
@@ -64,4 +67,4 @@ class GomokuUI:
                 col = mouse_pos[0] // self.SQUARE_SIZE
                 row = mouse_pos[1] // self.SQUARE_SIZE
                 return (row, col)
-        return None
+        return (-1,-1)
