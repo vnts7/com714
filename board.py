@@ -1,3 +1,4 @@
+from constants import Constants
 class Board:
     def __init__(self, size):
         self.size = size
@@ -49,10 +50,42 @@ class Board:
                     return False
         return True
 
-    def get_empty_cells(self):
-        cells = []
+    def count_empty_cell(self):
+        count = 0
         for row in range(self.size):
             for col in range(self.size):
                 if self.is_empty_cell(row, col):
-                    cells.append((row, col))
-        return cells
+                    count += 1
+        return count
+    
+    def has_winner(self):
+        lines = self.get_all_lines()
+        for line in lines:
+            if (self.is_winning_line(line) == Constants.Constants.COMP ):
+                return Constants.COMP
+            if (self.is_winning_line(line) == Constants.HUMAN):
+                return Constants.HUMAN
+        return None
+    
+    def is_winning_line(self, line):
+        if(self.score_line(line) == 10000): return Constants.COMP
+        if(self.score_line(line) == -10000): return Constants.HUMAN
+        return None
+    
+    def score_line(line):
+        score = 0
+        try: 
+            if (len(line) == 6):
+                score += Constants.SCORE_DICT_COMP_6[tuple(line)]
+            else:
+                score += Constants.SCORE_DICT_COMP_5[tuple(line)]
+        except (KeyError):
+            score += 0
+        try:
+            if (len(line) == 6):
+                score += Constants.SCORE_DICT_HUMAN_6[tuple(line)]
+            else:
+                score += Constants.SCORE_DICT_HUMAN_6[tuple(line)]
+        except (KeyError):
+            score += 0
+        return score
