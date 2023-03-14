@@ -1,9 +1,13 @@
 class Game:
-    def __init__(self, size, player1, player2):
-        self.board = Board(size)
+    def __init__(self, board, player1, player2, first):
+        self.board = board
         self.player1 = player1
         self.player2 = player2
-        self.current_player = player1
+        if (first == 'Y'):
+            self.current_player = player1
+        else:
+            self.current_player = player2
+             
 
     def switch_player(self):
         if self.current_player == self.player1:
@@ -16,3 +20,6 @@ class Game:
             for j in range(self.board.size):
                     return True
         return False
+    
+    def start_game(self):
+         pass
