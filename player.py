@@ -1,4 +1,3 @@
 class Player:
-    def __init__(self, symbol, is_ai):
+    def __init__(self, symbol):
         self.symbol = symbol
-        self.is_ai = is_ai

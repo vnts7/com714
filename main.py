@@ -2,7 +2,6 @@ from game import Game
 from player import Player
 from board import Board
 
-
 def get_input():
     size = 0
     human_symbol = ''  # X or O
@@ -36,8 +35,8 @@ def get_input():
 
 def main():
     size, human_symbol, comp_symbol, first = get_input()
-    player_human = Player(human_symbol, False)
-    player_comp = Player(comp_symbol, True)
+    player_human = Player(human_symbol)
+    player_comp = Player(comp_symbol)
     board = Board(size)
     game = Game(board, player_human, player_comp, first)
     game.start_game()
