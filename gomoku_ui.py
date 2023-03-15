@@ -47,7 +47,7 @@ class GomokuUI:
         self.draw_board(grid, symbol_human, symbol_comp)
 
     def draw_message(self, message):
-        text = self.font.render(message, True, self.BLACK)
+        text = self.font.render(message, True, self.RED)
         text_rect = text.get_rect(center=(self.length//2, self.length-self.SQUARE_SIZE//2))
         self.screen.blit(text, text_rect)
     
@@ -64,7 +64,6 @@ class GomokuUI:
                     pygame.quit()
                     return
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    # Xử lý click chuột
                     col = event.pos[0] // self.SQUARE_SIZE
                     row = event.pos[1] // self.SQUARE_SIZE
                     return row, col

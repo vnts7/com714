@@ -102,6 +102,16 @@ class Game:
         self.ui.draw_board(self.board.grid, self.player_human.symbol, self.player_comp.symbol)
         self.ui.update()
     
+    def show_notification(self):
+        if self.board.has_winner() == Constants.HUMAN:
+            self.ui.draw_message('YOU WIN')
+        elif self.board.has_winner() == Constants.COMP:
+            self.ui.draw_message('YOU LOSE')
+        else:
+            self.ui.draw_message('DRAW')
+        self.ui.update()
+        
+    
     def start_game(self):
         self.draw_ui()
         while (not self.is_game_over()):
@@ -110,4 +120,5 @@ class Game:
             else:
                 self.handle_human_turn()
             self.switch_player()
-            
+        while(True):
+            self.show_notification()
