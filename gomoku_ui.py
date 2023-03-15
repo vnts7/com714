@@ -14,7 +14,7 @@ class GomokuUI:
         self.size = size
         self.screen = pygame.display.set_mode((self.length, self.length))
         pygame.display.set_caption(f"Gomoku Game {self.size} x {self.size}")
-        self.font = pygame.font.SysFont(None, 30)
+        self.font = pygame.font.SysFont(None, 50)
 
     def draw_board(self, grid, symbol_human, symbol_comp):
         for row in range(self.size):
