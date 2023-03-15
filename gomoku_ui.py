@@ -1,5 +1,4 @@
 import pygame
-import sys
 from constants import Constants
 
 class GomokuUI:

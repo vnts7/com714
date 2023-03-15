@@ -75,9 +75,13 @@ class Game:
             x = math.floor(size/2)
             y = math.floor(size/2)
         else:
-            if (depth > 2):
-                depth = 2
-            _, x, y = self.alpha_beta_pruning(self.player_comp, -math.inf, math.inf, depth)
+            result = self.board.ai_choose_next_move()
+            if(result is not None):
+                x, y = result
+            else:
+                if (depth > 2):
+                    depth = 2
+                _, x, y = self.alpha_beta_pruning(self.player_comp, -math.inf, math.inf, depth)
         self.board.set_move(x, y, Constants.COMP)
         self.draw_ui()
 
