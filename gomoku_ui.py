@@ -7,6 +7,7 @@ class GomokuUI:
     RED = (255, 0, 0)
     BLACK = (0, 0, 0)
     SQUARE_SIZE = 40
+
     def __init__(self, size):
         pygame.init()
         self.length = self.SQUARE_SIZE*size
@@ -14,6 +15,7 @@ class GomokuUI:
         self.screen = pygame.display.set_mode((self.length, self.length))
         pygame.display.set_caption(f"Gomoku Game {self.size} x {self.size}")
         self.font = pygame.font.SysFont(None, 50)
+        
 
     def draw_board(self, grid, symbol_human, symbol_comp):
         for row in range(self.size):
@@ -28,11 +30,12 @@ class GomokuUI:
         y = row * self.SQUARE_SIZE + self.SQUARE_SIZE // 2
         if (symbol == 'X'):
             pygame.draw.line(self.screen, self.BLACK, (x - self.SQUARE_SIZE // 3, y -
-                            self.SQUARE_SIZE // 3), (x + self.SQUARE_SIZE // 3, y + self.SQUARE_SIZE // 3), 5)
+                                                       self.SQUARE_SIZE // 3), (x + self.SQUARE_SIZE // 3, y + self.SQUARE_SIZE // 3), 5)
             pygame.draw.line(self.screen, self.BLACK, (x - self.SQUARE_SIZE // 3, y +
-                            self.SQUARE_SIZE // 3), (x + self.SQUARE_SIZE // 3, y - self.SQUARE_SIZE // 3), 5)
+                                                       self.SQUARE_SIZE // 3), (x + self.SQUARE_SIZE // 3, y - self.SQUARE_SIZE // 3), 5)
         else:
-            pygame.draw.circle(self.screen, self.BLACK, (x, y), self.SQUARE_SIZE // 2 - 5)
+            pygame.draw.circle(self.screen, self.BLACK,
+                               (x, y), self.SQUARE_SIZE // 2 - 5)
 
     def draw_grid(self):
         for x in range(0, self.length, self.SQUARE_SIZE):
@@ -47,22 +50,19 @@ class GomokuUI:
 
     def draw_message(self, message):
         text = self.font.render(message, True, self.RED)
-        text_rect = text.get_rect(center=(self.length//2, self.length-self.SQUARE_SIZE//2))
+        text_rect = text.get_rect(
+            center=(self.length//2, self.length-self.SQUARE_SIZE//2))
         self.screen.blit(text, text_rect)
-    
+
+    def draw_button(self):
+        button_width, button_height = 160, 80
+        text_surface = self.font.render("Restart", True, self.BLACK)
+        self.button_rect = pygame.Rect(
+            (self.length - button_width) // 2, 0, button_width, button_height)
+        pygame.draw.rect(self.screen, self.WHITE, self.button_rect)
+
+        text_rect = text_surface.get_rect(center=self.button_rect.center)
+        self.screen.blit(text_surface, text_rect)
+
     def fill_screen(self):
         self.screen.fill(self.WHITE)
-
-    def update(self):
-        pygame.display.update()
-
-    def handle_click_events(self):
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    return
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    col = event.pos[0] // self.SQUARE_SIZE
-                    row = event.pos[1] // self.SQUARE_SIZE
-                    return row, col

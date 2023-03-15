@@ -1,6 +1,7 @@
 from game import Game
 from player import Player
 from board import Board
+from constants import Constants
 
 def get_input():
     size = 0
@@ -33,13 +34,13 @@ def get_input():
             print('Bad choice')
     return size, human_symbol, comp_symbol, first
 
+
 def main():
     size, human_symbol, comp_symbol, first = get_input()
-    player_human = Player(human_symbol)
-    player_comp = Player(comp_symbol)
+    player_human = Player(human_symbol, Constants.HUMAN)
+    player_comp = Player(comp_symbol, Constants.COMP)
     board = Board(size)
     game = Game(board, player_human, player_comp, first)
     game.start_game()
-
 
 main()
