@@ -61,9 +61,9 @@ class Board:
     def has_winner(self):
         lines = self.get_all_lines()
         for line in lines:
-            if (self.score_line(line) == 10000 ):
+            if (self.score_line(line) == Constants.FIVE_IN_A_ROW_SCORE ):
                 return Constants.COMP
-            if (self.score_line(line) == -10000):
+            if (self.score_line(line) == -Constants.FIVE_IN_A_ROW_SCORE):
                 return Constants.HUMAN
         return None
     
@@ -80,7 +80,7 @@ class Board:
             if (len(line) == 6):
                 score += Constants.SCORE_DICT_HUMAN_6[tuple(line)]
             else:
-                score += Constants.SCORE_DICT_HUMAN_6[tuple(line)]
+                score += Constants.SCORE_DICT_HUMAN_5[tuple(line)]
         except (KeyError):
             score += 0
         return score
