@@ -9,7 +9,7 @@ class Game:
         self.board = board
         self.player_human = player_human
         self.player_comp = player_comp
-        self.ui = GomokuUI(board.size)
+        self.ui = board.ui #GomokuUI(board.size)
         self.first = first
         if (first == 'Y'):
             self.current_player = player_human
@@ -35,7 +35,7 @@ class Game:
         if depth >= size* size - 2:
             x = math.floor(size/2)
             y = math.floor(size/2)
-            while(not self.board.set_move(x, y, self.current_player.name)):
+            while(not self.board.set_move(x, y, self.current_player)):
                 x = random.randint(math.floor(size/2)-2, math.floor(size/2)+2)
                 y = random.randint(math.floor(size/2)-2, math.floor(size/2)+2)
         else:
@@ -46,8 +46,7 @@ class Game:
                 if (depth > 2):
                     depth = 2
                 _, x, y = self.board.alpha_beta_pruning(self.current_player.name, -math.inf, math.inf, depth)
-        self.board.set_move(x, y, self.current_player.name)
-        self.draw_ui()
+        self.board.set_move(x, y, self.current_player)
 
     def handle_human_turn(self):
         if self.is_game_over():
@@ -56,17 +55,17 @@ class Game:
         is_choose = False
         while not is_choose:
             row, col = self.handle_human_choose_cell_event()
-            if self.board.set_move(row, col, self.current_player.name):
+            if self.board.set_move(row, col, self.current_player):
                 is_choose = True
                 break
             else:
                 continue
-        self.draw_ui()
 
     def handle_human_choose_cell_event(self):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    #todo:
                     col = event.pos[0] // self.ui.SQUARE_SIZE
                     row = event.pos[1] // self.ui.SQUARE_SIZE
                     if (row < self.ui.size and col < self.ui.size): 
@@ -83,12 +82,6 @@ class Game:
             if event.type == pygame.QUIT:
                 exit()
 
-    def draw_ui(self):
-        self.ui.fill_screen()
-        self.ui.draw_grid()
-        self.ui.draw_board(self.board.grid, self.player_human.symbol, self.player_comp.symbol)
-        pygame.display.update()
-
     def show_notification(self):
         if self.board.has_winner() == self.player_human.name:
             self.ui.draw_message('YOU WIN')
@@ -103,7 +96,7 @@ class Game:
         pygame.display.update()
     
     def start_game(self):
-        self.draw_ui()
+        self.ui.draw_board()
         while (not self.is_game_over()):
             if(self.current_player == self.player_comp):
                 self.handle_comp_turn()
@@ -111,9 +104,10 @@ class Game:
                 self.handle_human_turn()
             self.switch_player()
             pygame.time.Clock().tick(60)
+        #game over
+        self.show_notification()
+        self.show_restart_button()
         while(True):
-            self.show_notification()
-            self.show_restart_button()
             self.handle_click_restart_button_event()
     
     def restart_game(self):

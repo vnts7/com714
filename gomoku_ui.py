@@ -16,15 +16,6 @@ class GomokuUI:
         pygame.display.set_caption(f"Gomoku Game {self.size} x {self.size}")
         self.font = pygame.font.SysFont(None, 50)
         
-
-    def draw_board(self, grid, symbol_human, symbol_comp):
-        for row in range(self.size):
-            for col in range(self.size):
-                if grid[row][col] == Constants.COMP:
-                    self.draw_piece(row, col, symbol_comp)
-                elif grid[row][col] == Constants.HUMAN:
-                    self.draw_piece(row, col, symbol_human)
-
     def draw_piece(self, row, col, symbol):
         x = col * self.SQUARE_SIZE + self.SQUARE_SIZE // 2
         y = row * self.SQUARE_SIZE + self.SQUARE_SIZE // 2
@@ -36,17 +27,15 @@ class GomokuUI:
         else:
             pygame.draw.circle(self.screen, self.BLACK,
                                (x, y), self.SQUARE_SIZE // 2 - 5)
+        pygame.display.update()
 
-    def draw_grid(self):
+    def draw_board(self):
+        self.screen.fill(self.WHITE)
         for x in range(0, self.length, self.SQUARE_SIZE):
             pygame.draw.line(self.screen, self.GRAY, (x, 0), (x, self.length))
         for y in range(0, self.length, self.SQUARE_SIZE):
             pygame.draw.line(self.screen, self.GRAY, (0, y), (self.length, y))
-
-    def draw_game(self, grid, symbol_human, symbol_comp):
-        self.screen.fill(self.WHITE)
-        self.draw_grid()
-        self.draw_board(grid, symbol_human, symbol_comp)
+        pygame.display.update()    
 
     def draw_message(self, message):
         text = self.font.render(message, True, self.RED)
@@ -64,5 +53,5 @@ class GomokuUI:
         text_rect = text_surface.get_rect(center=self.button_rect.center)
         self.screen.blit(text_surface, text_rect)
 
-    def fill_screen(self):
-        self.screen.fill(self.WHITE)
+    # def fill_screen(self):
+    #     self.screen.fill(self.WHITE)
