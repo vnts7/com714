@@ -1,7 +1,7 @@
 from constants import Constants
 import math
 
-from gomoku_ui import GomokuUI
+from ui_helper import UIHelper
 from player import Player
 from enum import Enum
 
@@ -23,7 +23,7 @@ class Board:
     self.size = size
     # Create a 2D array size*size, init value of element is None
     self.grid = [[None for _ in range(size)] for _ in range(size)]
-    self.ui = GomokuUI(size)
+    self.ui = UIHelper(size)
 
   # get all lines 5 cells and 6 cells
   def get_all_lines(self):
