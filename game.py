@@ -12,7 +12,7 @@ class Game:
     self.board = board
     self.player_human = player_human
     self.player_comp = player_comp
-    self.ui = board.ui  #UIHelper(board.size)
+    self.ui = board.ui
     self.first = first
     if (first == 'Y'):
       self.current_player = player_human
@@ -31,24 +31,9 @@ class Game:
   def handle_comp_turn(self):
     if self.is_game_over():
       return
-
-    depth = self.board.count_empty_cell()
     print(f'Computer turn [{self.current_player.symbol}]')
-    size = self.board.size
-    if depth >= size * size - 2:
-      x = math.floor(size / 2)
-      y = math.floor(size / 2)
-      while (not self.board.set_move(x, y, self.current_player)):
-        x = random.randint(math.floor(size / 2) - 2, math.floor(size / 2) + 2)
-        y = random.randint(math.floor(size / 2) - 2, math.floor(size / 2) + 2)
-    else:
-      result = self.board.ai_choose_next_move()
-      if (result is not None):
-        x, y = result
-      else:
-        if (depth > 2):
-          depth = 2
-        _, x, y = self.board.alpha_beta_pruning(self.current_player.name, -math.inf, math.inf, depth)
+
+    x,y = self.board.ai_next_move()
     self.board.set_move(x, y, self.current_player)
 
   def handle_human_turn(self):
@@ -68,7 +53,6 @@ class Game:
     while True:
       for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
-          #todo:
           col = event.pos[0] // self.ui.SQUARE_SIZE
           row = event.pos[1] // self.ui.SQUARE_SIZE
           if (row < self.ui.size and col < self.ui.size):
@@ -107,7 +91,7 @@ class Game:
         self.handle_human_turn()
       self.switch_player()
       pygame.time.Clock().tick(60)
-    #game over
+    #--game over
     self.show_notification()
     self.show_restart_button()
     while (True):

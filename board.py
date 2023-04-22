@@ -1,3 +1,4 @@
+import random
 from constants import Constants
 import math
 
@@ -5,17 +6,21 @@ from ui_helper import UIHelper
 from player import Player
 from enum import Enum
 
+
 class Direction(Enum):
-    VERTICAL = 1
-    HORIZONTAL = 2
-    DIAGONAL1 = 3
-    DIAGONAL2 = 4
+  VERTICAL = 1
+  HORIZONTAL = 2
+  DIAGONAL1 = 3
+  DIAGONAL2 = 4
+
 
 class Line:
-    def __init__(self, data: list, direction: Direction, pos: tuple):
-        self.data = data
-        self.direction = direction
-        self.pos = pos
+
+  def __init__(self, data: list, direction: Direction, pos: tuple):
+    self.data = data
+    self.direction = direction
+    self.pos = pos
+
 
 class Board:
 
@@ -150,6 +155,25 @@ class Board:
     else:
       return False
 
+  def ai_next_move(self):
+    depth = self.count_empty_cell()
+    size = self.size
+    if depth >= size * size - 2:
+      x = math.floor(size / 2)
+      y = math.floor(size / 2)
+      while (self.grid[x][y] != None):
+        x = random.randint(math.floor(size / 2) - 2, math.floor(size / 2) + 2)
+        y = random.randint(math.floor(size / 2) - 2, math.floor(size / 2) + 2)
+    else:
+      result = self.obvious_ai_move()
+      if (result is not None):
+        x, y = result
+      else:
+        if (depth > 2):
+          depth = 2
+        _, x, y = self.alpha_beta_pruning(Constants.COMP, -math.inf, math.inf, depth)
+    return x, y
+
   def alpha_beta_pruning(self, player_name, alpha, beta, depth):
     if depth == 0 or self.has_winner() is not None:
       return self.evaluate(), None, None
@@ -188,19 +212,18 @@ class Board:
               break
       return min_score, x, y
 
-  def ai_choose_next_move(self):
-    next_move = None
+  def obvious_ai_move(self):
     lines = self.get_all_lines()
     list_function = [
-        self.is_three_in_a_row_comp_line,
-        self.is_blocked_four_human_line,
         self.is_blocked_four_comp_line,
+        self.is_blocked_four_human_line,
+        self.is_three_in_a_row_comp_line,
     ]
     for i in range(len(list_function)):
       for line in lines:
         if list_function[i](line):
-          next_move = self.get_coordinate_of_none_in_line(line)
-    return next_move
+          return self.get_coordinate_of_none_in_line(line)
+    return None
 
   def get_coordinate_of_none_in_line(self, line: Line):
     index = line.data.index(None)
